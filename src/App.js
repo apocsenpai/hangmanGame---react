@@ -1,24 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import Chute from './components/Chute';
+import Jogo from './components/Jogo';
+import Letras from './components/Letras';
 
 function App() {
+  const hangmanImageList = ["forca0","forca1","forca2","forca3","forca4","forca5","forca6"];
+  const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Jogo hangmanImageList={hangmanImageList} />
+      <Letras alphabet={alphabet} />
+      <Chute />
+    </>
   );
 }
 
