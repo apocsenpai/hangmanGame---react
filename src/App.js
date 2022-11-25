@@ -2,7 +2,7 @@ import { useState } from "react";
 import Chute from "./components/Chute";
 import Jogo from "./components/Jogo";
 import Letras from "./components/Letras";
-import palavras from "./palavras"
+import palavras from "./palavras.js"
 
 function App() {
   const hangmanImageList = [
