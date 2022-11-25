@@ -50,7 +50,8 @@ function App() {
   const [clickedLetter, setClickLetter] = useState([]);
   const [wrongClick, setWrongClick] = useState(0);
   const [colorWord, setColorWord] = useState("");
-  const [gameFinish, setGameFinish] = useState(false)
+  const [gameFinish, setGameFinish] = useState(false);
+  const [inputGuess, setInputGuess] = useState("");
   console.log(rightWord)
 
   function startGame() {
@@ -70,26 +71,42 @@ function App() {
   function isIncludedInTheWord(letter) {
     setClickLetter([...clickedLetter, letter]);
     if (rightWord.includes(letter)) {
-      const newGameWord = rightWord.map((r, index) => letter === r ? letter : gameWord[index]);
-      setGameWord(newGameWord);
-      if(!newGameWord.includes("_")){
-        endGame('right-answer')
+      setGameWord(wordWithRightLetter(letter));
+      if (!wordWithRightLetter(letter).includes("_")) {
+        endGame("right-answer");
       }
     } else {
       const counterAmount = wrongClick + 1;
       setWrongClick(counterAmount);
       if (counterAmount === 6) {
-        endGame('wrong-answer');
+        endGame("wrong-answer");
       }
     }
   }
+  function wordWithRightLetter(letter){
+    return rightWord.map((r, index) =>
+    letter === r ? letter : gameWord[index]
+  );
+  }
+  function takeAGuess() {
+    const guessWord = inputGuess.split("");
+    const isRightAnswer = guessWord.filter((g, index)=> g === rightWord[index])
 
-  function endGame(result){
+    if(isRightAnswer.length === rightWord.length){
+      endGame("right-answer");
+    }else{
+      endGame("wrong-answer");
+      setWrongClick(6);
+    }
+
+  }
+  function endGame(result) {
     setColorWord(result);
     setGameWord(rightWord);
     setGameFinish(!gameFinish);
     setClickLetter([]);
     setGameIsStarted(false);
+    setInputGuess('')
   }
   return (
     <>
@@ -99,7 +116,7 @@ function App() {
         gameIsStarted={gameIsStarted}
         gameWord={gameWord}
         wrongClick={wrongClick}
-        colorWord ={colorWord}
+        colorWord={colorWord}
         gameFinish={gameFinish}
       />
       <Letras
@@ -108,7 +125,12 @@ function App() {
         isIncludedInTheWord={isIncludedInTheWord}
         clickedLetter={clickedLetter}
       />
-      <Chute gameIsStarted={gameIsStarted} />
+      <Chute
+        gameIsStarted={gameIsStarted}
+        inputGuess={inputGuess}
+        setInputGuess={setInputGuess}
+        takeAGuess={takeAGuess}
+      />
     </>
   );
 }
