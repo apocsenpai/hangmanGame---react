@@ -43,16 +43,17 @@ function App() {
     "z",
   ];
   const totalWordList = palavras.palavras;
-
+  const [rightWord, setRightWord] = useState("");
   const [gameIsStarted, setGameIsStarted] = useState(false);
-  const [rightWord, setRightWord] = useState([]);
+  const [normalizedRightWord, setNormalizedRightWord] = useState([]);
   const [gameWord, setGameWord] = useState([]);
   const [clickedLetter, setClickLetter] = useState([]);
   const [wrongClick, setWrongClick] = useState(0);
   const [colorWord, setColorWord] = useState("");
   const [gameFinish, setGameFinish] = useState(false);
   const [inputGuess, setInputGuess] = useState("");
-  console.log(rightWord)
+  console.log(rightWord);
+  console.log(normalizedRightWord);
 
   function startGame() {
     setWrongClick(0);
@@ -60,8 +61,10 @@ function App() {
     setGameIsStarted(!gameIsStarted);
     const randomWord =
       totalWordList[selectWord(totalWordList.length)].split("");
+    const normalizedWord = removeSpecialCharacters(randomWord);
     setRightWord(randomWord);
-    setGameWord(randomWord.map((r) => "_"));
+    setNormalizedRightWord(normalizedWord);
+    setGameWord(normalizedWord.map((r) => "_"));
   }
 
   function selectWord(totalWord) {
@@ -70,7 +73,7 @@ function App() {
 
   function isIncludedInTheWord(letter) {
     setClickLetter([...clickedLetter, letter]);
-    if (rightWord.includes(letter)) {
+    if (normalizedRightWord.includes(letter)) {
       setGameWord(wordWithRightLetter(letter));
       if (!wordWithRightLetter(letter).includes("_")) {
         endGame("right-answer");
@@ -83,22 +86,26 @@ function App() {
       }
     }
   }
-  function wordWithRightLetter(letter){
-    return rightWord.map((r, index) =>
-    letter === r ? letter : gameWord[index]
-  );
+  function wordWithRightLetter(letter) {
+    return normalizedRightWord.map((r, index) =>
+      letter === r ? rightWord[index] : gameWord[index]
+    );
   }
   function takeAGuess() {
-    const guessWord = inputGuess.split("");
-    const isRightAnswer = guessWord.filter((g, index)=> g === rightWord[index])
+    const guessWord = removeSpecialCharacters(inputGuess.split(""));
+    const isRightAnswer = guessWord.filter(
+      (g, index) => g === normalizedRightWord[index]
+    );
 
-    if(isRightAnswer.length === rightWord.length){
+    if (isRightAnswer.length === normalizedRightWord.length) {
       endGame("right-answer");
-    }else{
+    } else {
       endGame("wrong-answer");
       setWrongClick(6);
     }
-
+  }
+  function removeSpecialCharacters(string) {
+    return string.map((r) => r.normalize("NFD").replace(/[^a-zA-Z\s]/g, ""));
   }
   function endGame(result) {
     setColorWord(result);
@@ -106,7 +113,7 @@ function App() {
     setGameFinish(!gameFinish);
     setClickLetter([]);
     setGameIsStarted(false);
-    setInputGuess('')
+    setInputGuess("");
   }
   return (
     <>
