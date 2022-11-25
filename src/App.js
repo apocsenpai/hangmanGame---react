@@ -2,7 +2,7 @@ import { useState } from "react";
 import Chute from "./components/Chute";
 import Jogo from "./components/Jogo";
 import Letras from "./components/Letras";
-import palavras from "./palavras.js";
+import palavras from "./palavras"
 
 function App() {
   const hangmanImageList = [
@@ -42,7 +42,7 @@ function App() {
     "y",
     "z",
   ];
-  const totalWordList = palavras.palavras;
+  const totalWordList = palavras;
   const [rightWord, setRightWord] = useState("");
   const [gameIsStarted, setGameIsStarted] = useState(false);
   const [normalizedRightWord, setNormalizedRightWord] = useState([]);
@@ -120,7 +120,7 @@ function App() {
       <Jogo
         hangmanImageList={hangmanImageList}
         startGame={startGame}
-        gameIsStarted={gameIsStarted}
+        rightWord={rightWord}
         gameWord={gameWord}
         wrongClick={wrongClick}
         colorWord={colorWord}
