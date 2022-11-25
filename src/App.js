@@ -12,7 +12,7 @@ function App() {
     "forca3",
     "forca4",
     "forca5",
-    "forca6",
+    "forca6"
   ];
   const alphabet = [
     "a",
@@ -40,7 +40,7 @@ function App() {
     "w",
     "x",
     "y",
-    "z",
+    "z"
   ];
   const totalWordList = palavras;
   const [rightWord, setRightWord] = useState("");
@@ -52,6 +52,7 @@ function App() {
   const [colorWord, setColorWord] = useState("");
   const [gameFinish, setGameFinish] = useState(false);
   const [inputGuess, setInputGuess] = useState("");
+  const maxErrors = 6;
   console.log(rightWord);
   console.log(normalizedRightWord);
 
@@ -64,7 +65,7 @@ function App() {
     const normalizedWord = removeSpecialCharacters(randomWord);
     setRightWord(randomWord);
     setNormalizedRightWord(normalizedWord);
-    setGameWord(normalizedWord.map((r) => "_"));
+    setGameWord(normalizedWord.map(() => "_"));
   }
 
   function selectWord(totalWord) {
@@ -81,7 +82,7 @@ function App() {
     } else {
       const counterAmount = wrongClick + 1;
       setWrongClick(counterAmount);
-      if (counterAmount === 6) {
+      if (counterAmount === maxErrors) {
         endGame("wrong-answer");
       }
     }
@@ -101,7 +102,7 @@ function App() {
       endGame("right-answer");
     } else {
       endGame("wrong-answer");
-      setWrongClick(6);
+      setWrongClick(maxErrors);
     }
   }
   function removeSpecialCharacters(string) {
