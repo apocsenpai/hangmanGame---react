@@ -53,16 +53,14 @@ function App() {
   const [gameFinish, setGameFinish] = useState(false);
   const [inputGuess, setInputGuess] = useState("");
   const maxErrors = 6;
-  console.log(rightWord);
-  console.log(normalizedRightWord);
 
   function startGame() {
     setWrongClick(0);
     setGameFinish(false);
     setGameIsStarted(!gameIsStarted);
     const randomWord =
-      totalWordList[selectWord(totalWordList.length)].split("");
-    const normalizedWord = removeSpecialCharacters(randomWord);
+      totalWordList[selectWord(totalWordList.length)];
+    const normalizedWord = removeSpecialCharacters(randomWord.split(""));
     setRightWord(randomWord);
     setNormalizedRightWord(normalizedWord);
     setGameWord(normalizedWord.map(() => "_"));
