@@ -73,7 +73,7 @@ const WordGame = styled.p`
   letter-spacing: 10px;
   word-break: break-all;
   color: ${({ gameFinish, gameResult }) => {
-    if (!gameFinish) return "black";
+    if (!gameFinish) {return "black"};
 
     return !gameResult ? "#ff0000" : "#27AE60";
   }};
