@@ -2,9 +2,10 @@ import { useState } from "react";
 import Chute from "./components/Chute";
 import Jogo from "./components/Jogo";
 import Letras from "./components/Letras";
-import palavras from "./palavras.js"
+import palavras from "./palavras.js";
+import GlobalStyles from "./theme/GlobalStyles";
 
-function App() {
+const App = () => {
   const hangmanImageList = [
     "forca0",
     "forca1",
@@ -12,7 +13,7 @@ function App() {
     "forca3",
     "forca4",
     "forca5",
-    "forca6"
+    "forca6",
   ];
   const alphabet = [
     "a",
@@ -40,7 +41,7 @@ function App() {
     "w",
     "x",
     "y",
-    "z"
+    "z",
   ];
   const totalWordList = palavras;
   const [rightWord, setRightWord] = useState("");
@@ -49,7 +50,7 @@ function App() {
   const [gameWord, setGameWord] = useState([]);
   const [clickedLetter, setClickLetter] = useState([]);
   const [wrongClick, setWrongClick] = useState(0);
-  const [colorWord, setColorWord] = useState("");
+  const [gameResult, setGameResult] = useState(false);
   const [gameFinish, setGameFinish] = useState(false);
   const [inputGuess, setInputGuess] = useState("");
   const maxErrors = 6;
@@ -57,9 +58,9 @@ function App() {
   function startGame() {
     setWrongClick(0);
     setGameFinish(false);
-    setGameIsStarted(!gameIsStarted);
-    const randomWord =
-      totalWordList[selectWord(totalWordList.length)];
+    setClickLetter([]);
+    setGameIsStarted(!gameIsStarted || !gameFinish ? true : false);
+    const randomWord = totalWordList[selectWord(totalWordList.length)];
     const normalizedWord = removeSpecialCharacters(randomWord.split(""));
     setRightWord(randomWord);
     setNormalizedRightWord(normalizedWord);
@@ -75,13 +76,13 @@ function App() {
     if (normalizedRightWord.includes(letter)) {
       setGameWord(wordWithRightLetter(letter));
       if (!wordWithRightLetter(letter).includes("_")) {
-        endGame("right-answer");
+        endGame(true);
       }
     } else {
       const counterAmount = wrongClick + 1;
       setWrongClick(counterAmount);
       if (counterAmount === maxErrors) {
-        endGame("wrong-answer");
+        endGame(false);
       }
     }
   }
@@ -97,9 +98,9 @@ function App() {
     );
 
     if (isRightAnswer.length === normalizedRightWord.length) {
-      endGame("right-answer");
+      endGame(true);
     } else {
-      endGame("wrong-answer");
+      endGame(false);
       setWrongClick(maxErrors);
     }
   }
@@ -107,7 +108,7 @@ function App() {
     return string.map((r) => r.normalize("NFD").replace(/[^a-zA-Z\s]/g, ""));
   }
   function endGame(result) {
-    setColorWord(result);
+    setGameResult(result);
     setGameWord(rightWord);
     setGameFinish(!gameFinish);
     setClickLetter([]);
@@ -116,13 +117,14 @@ function App() {
   }
   return (
     <>
+      <GlobalStyles />
       <Jogo
         hangmanImageList={hangmanImageList}
         startGame={startGame}
         rightWord={rightWord}
         gameWord={gameWord}
         wrongClick={wrongClick}
-        colorWord={colorWord}
+        gameResult={gameResult}
         gameFinish={gameFinish}
       />
       <Letras
@@ -139,6 +141,6 @@ function App() {
       />
     </>
   );
-}
+};
 
 export default App;
