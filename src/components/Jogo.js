@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { BsList } from "react-icons/bs";
+import ShowWordList from "./ShowWordList";
 
 const Jogo = ({
   hangmanImageList,
@@ -8,6 +10,8 @@ const Jogo = ({
   wrongClick,
   gameResult,
   gameFinish,
+  toggleWordList,
+  gameIsStarted
 }) => {
   return (
     <GameSection>
@@ -28,6 +32,11 @@ const Jogo = ({
           {gameWord}
         </WordGame>
       </section>
+      <ShowWordList onClick={toggleWordList} disabled={gameIsStarted}>
+        <span>
+          <BsList />
+        </span>
+      </ShowWordList>
     </GameSection>
   );
 };
@@ -76,9 +85,9 @@ const WordGame = styled.p`
     if (!gameFinish) {
       return "black";
     }
-
     return !gameResult ? "#ff0000" : "#27AE60";
   }};
 `;
+
 
 export default Jogo;

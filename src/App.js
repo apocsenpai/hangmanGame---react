@@ -2,6 +2,7 @@ import { useState } from "react";
 import Chute from "./components/Chute";
 import Jogo from "./components/Jogo";
 import Letras from "./components/Letras";
+import WordList from "./components/WordList";
 import palavras from "./palavras.js";
 import GlobalStyles from "./theme/GlobalStyles";
 
@@ -43,7 +44,7 @@ const App = () => {
     "y",
     "z",
   ];
-  const totalWordList = palavras;
+  const [totalWordList, setTotalWordList] = useState(palavras);
   const [rightWord, setRightWord] = useState("");
   const [gameIsStarted, setGameIsStarted] = useState(false);
   const [normalizedRightWord, setNormalizedRightWord] = useState([]);
@@ -53,6 +54,9 @@ const App = () => {
   const [gameResult, setGameResult] = useState(false);
   const [gameFinish, setGameFinish] = useState(false);
   const [inputGuess, setInputGuess] = useState("");
+  const [visibleWordList, setVisibleWordList] = useState(false);
+  const [visibleInputAddWord, setVisibleInputAddWord] = useState(false);
+  const [inputAddWord, setInputAddWord] = useState("");
   const maxErrors = 6;
 
   function startGame() {
@@ -115,9 +119,31 @@ const App = () => {
     setGameIsStarted(false);
     setInputGuess("");
   }
+  // Plus
+  function toggleWordList() {
+    setVisibleWordList(!visibleWordList);
+  }
+  function toggleInputAddWord() {
+    setVisibleInputAddWord(!visibleInputAddWord);
+  }
+  function addWordOnList(){
+    setTotalWordList([...totalWordList, inputAddWord]);
+    setInputAddWord("");
+    setVisibleInputAddWord(!visibleInputAddWord)
+  }
   return (
     <>
       <GlobalStyles />
+      <WordList
+        totalWordList={totalWordList}
+        visibleWordList={visibleWordList}
+        toggleWordList={toggleWordList}
+        toggleInputAddWord={toggleInputAddWord}
+        visibleInputAddWord={visibleInputAddWord}
+        setInputAddWord={setInputAddWord}
+        inputAddWord={inputAddWord}
+        addWordOnList={addWordOnList}
+      />
       <Jogo
         hangmanImageList={hangmanImageList}
         startGame={startGame}
@@ -126,6 +152,8 @@ const App = () => {
         wrongClick={wrongClick}
         gameResult={gameResult}
         gameFinish={gameFinish}
+        toggleWordList={toggleWordList}
+        gameIsStarted={gameIsStarted}
       />
       <Letras
         alphabet={alphabet}
